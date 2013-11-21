@@ -16,8 +16,8 @@ public class Transaction {
             format.parse(scanDate);
         } catch (ParseException e) {
         	//System.out.println("ParseException e")
-        	System.out.println("Invalid date!");
-        	System.exit(0);
+        	//System.out.println("Invalid date!");
+        	//System.exit(0);
             return false;
         } catch (IllegalArgumentException e) {
         	//System.out.println("IllegalArgumentException e");

@@ -6,18 +6,25 @@ import java.util.Scanner;
 import java.util.Vector;
 
 
+
+
 public class Controller{
 	ProductDB db = new ProductDB();
     HashMap <String, Product> contents = new HashMap <String, Product>();
     Cart cart = new Cart();
     
+    
+    
     Controller(){       
         contents = db.loadInventory();
     }
+  
 
+	
+    
     String getItemInfo(String key){
-       return contents.get(key).toString(); 
-    }
+        return contents.get(key).toString(); 
+     }
     
     String getItemInventory(){
         Vector <String> keys = new Vector (contents.keySet());
@@ -26,7 +33,7 @@ public class Controller{
         for (Enumeration <String> e = keys.elements(); e.hasMoreElements();){
             String key = e.nextElement();
             Product item = contents.get(key); 
-            String ID;
+            String[] name;
             msg += item.name + ", " + item.ID + ", " + item.dbQty + "\n";
         }
         return msg;
@@ -44,7 +51,7 @@ public class Controller{
         return msg;
     }
    
-    
+	
     
     public boolean addToCart(String productID){
         if(db.isInStock(productID)){
@@ -64,4 +71,6 @@ public class Controller{
                 return false;
             }
     }    
+    
+  
 }      

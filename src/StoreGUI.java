@@ -1,19 +1,16 @@
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -23,6 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -33,17 +31,24 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
 	  JLabel label;
 	  JLabel picture;
 	  JFrame frame;
+	  JList itemList;
+	  JScrollPane itemScroll;
+	  JSplitPane splitPane;
+	  JTextArea infoText;
+	  JRadioButton radioButtons;
+	  JButton viewButton;
+	  JPanel buttonPane;
 	  String simpleDialogDesc = "Some simple message dialogs";
 	  String menuHoverDesc = "SmartStore.com Command Menu";
 	  String detailsHoverDesc = "Item Descriptions and Images";
-	  String[] imageNames = {"Pirate Latitudes", "The Complete Sherlock Holmes", "Harry Potter and the Deathly Hallows", "Here We Go Again", "McCartney", "The King's Speech",
+	  String[] name = {"Pirate Latitudes", "The Complete Sherlock Holmes", "Harry Potter and the Deathly Hallows", "Here We Go Again", "McCartney", "The King's Speech",
 	            "The Horse Whisperer", "Rocky Horror Picture Show", "The Lord of the Rings"};
 	  
 	  Controller ctrl = new Controller();
 	  
 	/** Creates the GUI shown inside the frame's content pane.  */
 	public StoreGUI() {
-
+		 
 		super(new BorderLayout());
 		JFrame frame = new JFrame();
 	    this.frame = frame;
@@ -79,42 +84,41 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
       label.setText(newText);
   }
 
-  /** Returns an ImageIcon, or null if the path was invalid. */
- /* protected static ImageIcon createImageIcon(String path) {
-      java.net.URL imgURL = StoreGUI.class.getResource(path);
-      if (imgURL != null) {
-          return new ImageIcon(imgURL);
-      } else {
-          System.err.println("Couldn't find file: " + path);
-          return null;
-      }
-  }*/
-
       
       /** Creates the panel shown by the first tab. */
       private JPanel menuTab() {
-          final int numButtons = 4;
+          final int numButtons = 6;
           JRadioButton[] radioButtons = new JRadioButton[numButtons];
           final ButtonGroup group = new ButtonGroup();
+       
 
           JButton selectButton = null;
 
-          final String defaultMessageCommand = "default";
+          final String cartCommand = "cart";
+          final String inventoryCommand = "inventory";
           final String yesNoCommand = "yesno";
-          final String addRemoveCommand = "addremove";
+          final String addCommand = "add";
+          final String removeCommand = "remove";
+          final String helpCommand = "okay";
+          
 
           radioButtons[0] = new JRadioButton("Cart");
-          radioButtons[0].setActionCommand(defaultMessageCommand);
-
-          radioButtons[1] = new JRadioButton("Add/Remove");
-          radioButtons[1].setActionCommand(addRemoveCommand);
+          radioButtons[0].setActionCommand(cartCommand);
           
-          //this needs to come up with a dialog
-          radioButtons[2] = new JRadioButton("Help");
-          radioButtons[2].setActionCommand(yesNoCommand);
+          radioButtons[1] = new JRadioButton("Inventory");
+          radioButtons[1].setActionCommand(inventoryCommand);
 
-          radioButtons[3] = new JRadioButton("Quit");
-          radioButtons[3].setActionCommand(yesNoCommand);
+          radioButtons[2] = new JRadioButton("Add");
+          radioButtons[2].setActionCommand(addCommand);
+          
+          radioButtons[3] = new JRadioButton("Remove");
+          radioButtons[3].setActionCommand(removeCommand);
+          
+          radioButtons[4] = new JRadioButton("Help");
+          radioButtons[4].setActionCommand(helpCommand);
+
+          radioButtons[5] = new JRadioButton("Quit");
+          radioButtons[5].setActionCommand(yesNoCommand);
 
           for (int i = 0; i < numButtons; i++) {
               group.add(radioButtons[i]);
@@ -126,12 +130,18 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
               public void actionPerformed(ActionEvent e) {
                   String command = group.getSelection().getActionCommand();
 
-                  //ok dialog
-                  if (command == defaultMessageCommand) {
+                  
+                  if (command == cartCommand) {
                       JOptionPane.showMessageDialog(frame,
-                                  "Eggs aren't supposed to be green.");
-
-                  //yes/no dialog
+                                  "Your Cart Contains: " + "\n" + ctrl.getCartInventory());
+                  } else if (command == inventoryCommand){
+                	  JOptionPane.showMessageDialog(frame,
+                			  "Store Inventory: " + "\n" + ctrl.getItemInventory());
+                  } else if (command == helpCommand){
+                	  JOptionPane.showMessageDialog(frame,
+                			  "I need somebody.",
+                			  "HELP!",
+                			  JOptionPane.INFORMATION_MESSAGE);
                   } else if (command == yesNoCommand) {
                       int n = JOptionPane.showConfirmDialog(
                               frame, "Are you sure you'd like to leave SmartStore.com?",
@@ -147,24 +157,62 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
                       } else if (n == JOptionPane.NO_OPTION) {
                           setLabel("Choose a command");
                       } 
-                  //yes/no (not in those words)
-                  } else if (command == addRemoveCommand) {
-                      Object[] options = {"Add", "Remove"};
-                      int n = JOptionPane.showOptionDialog(frame,
-                                      "Select an Item",
-                                      "A Silly Question",
-                                      JOptionPane.YES_NO_OPTION,
-                                      JOptionPane.QUESTION_MESSAGE,
-                                      null,
-                                      options,
-                                      options[0]);
-                      if (n == JOptionPane.YES_OPTION) {
-                          setLabel("You're kidding!");
-                      } else if (n == JOptionPane.NO_OPTION) {
-                          setLabel("I don't like them, either.");
-                      } else {
-                          setLabel("Come on -- 'fess up!");
+                  } else if (command == addCommand) {
+                      String date = (String)JOptionPane.showInputDialog(
+                                          frame,
+                                          "Enter Date"
+                                          + "Please Enter Transaction Date: ",
+                                          "(mm/dd/yyyy)");
+
+                      //If a string was returned, say so.
+                      if ((date != null) && (date.length() > 0)) {
+                    	  Transaction.isValidDate(date);{
+                        		if (Transaction.isValidDate(date) == true){
+                      			setLabel("Valid Date");
+                      			String productID = (String)JOptionPane.showInputDialog(frame,
+                      					"Enter Item"
+                      					+"What Item Would You Like to Add?",
+                      					"Item Name");{
+                      						if(ctrl.addToCart(productID) == true){
+                      							setLabel("Item Added");
+                      						} else {
+                      							setLabel("Invalid Item. Item not added");
+                      						}
+                      					}
+                        		}  else {
+                                    setLabel("Invalid Date. You entered:  '" + date + "'");
+                                    return;
+                        		}
+                      		} 
+                     
                       }
+                  } else if (command == removeCommand) {
+                	  String date = (String)JOptionPane.showInputDialog(
+                              frame,
+                              "Enter Date"
+                              + "Please Enter Transaction Date: ",
+                              "(mm/dd/yyyy)");
+
+                	  //If a string was returned, say so.
+                      if ((date != null) && (date.length() > 0)){
+                    	  //Transaction.isValidDate(date);{
+                  		if (Transaction.isValidDate(date) == true){
+                			setLabel("Valid Date");
+                  			String productID = (String)JOptionPane.showInputDialog(frame,
+                  					"Enter Item"
+                  					+ "What Item Would You Like to Remove?",
+                  					"Item Name");{
+                  						if(ctrl.removeFromCart(productID) == true){
+                  							setLabel("Item Removed");
+                  						} else {
+                  							setLabel("Invalid Item. Item not removed");
+                  						}
+                  			}
+                  		} else {
+                          setLabel("Invalid Date. You entered:  '" + date + "'");
+                          return;
+                  		}
+                      } 
                   } 
                   return;
               }
@@ -181,26 +229,24 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
     	    JLabel picture = new JLabel();
     	    JList itemList = new JList(); 
     	    JScrollPane itemScroll = new JScrollPane();
-            //JButton doneButton = new JButton("Done");
-		    
-	//return
-     // }
-      return createPane2(detailsHoverDesc + ":",
+    	    JButton viewButton = new JButton();
+    	    //JPanel buttonPane = new JPanel();
+
+     
+	return createPane2(detailsHoverDesc + ":",
     		  itemSplit,
     		  itemList,
-              itemScroll);
-}
-
-
-	//Listens to the list
-      public void listValueChanged(ListSelectionEvent e) {
-          JList list = (JList)e.getSource();
-          updateLabel(imageNames[list.getSelectedIndex()]);
+              itemScroll,
+              viewButton
+              //buttonPane
+              );
+	
       }
+
        
       //Renders the selected image
       protected void updateLabel (String name) {
-          ImageIcon icon = createImageIcon("images/" + name + ".gif");
+          ImageIcon icon = createImageIcon(name + ".jpg");
           picture.setIcon(icon);
           if  (icon != null) {
               picture.setText(null);
@@ -208,7 +254,7 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
               picture.setText("Image not found");
           }
       }
-      
+   
       /** Returns an ImageIcon, or null if the path was invalid. */
       protected static ImageIcon createImageIcon(String path) {
          java.net.URL imgURL = StoreGUI.class.getResource(path);
@@ -220,15 +266,22 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
           }
       }
       
+      public JList getImageList() {
+          return itemList;
+      }
+
+      
       private JSplitPane createPane2(String description,
     		  					 JSplitPane itemSplit,
     		  					 JList itemList,
-    		  					 JScrollPane itemScroll){
-    	//JPanel panel = new JPanel();
-    	
+    		  					 JScrollPane itemScroll,
+    		  					 JButton showButton
+    		  					 ){
+    	  JButton viewButton = null;
+      
   	    //Create the list of images and put it in a scroll pane.
           
-          itemList = new JList(imageNames);
+          itemList = new JList(name);
           itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
           itemList.setSelectedIndex(0);
           itemList.addListSelectionListener(this);
@@ -238,47 +291,36 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
           picture = new JLabel();
           picture.setFont(picture.getFont().deriveFont(Font.ITALIC));
           picture.setHorizontalAlignment(JLabel.CENTER);
-           
+          
+          
+          
+          
           JScrollPane pictureScrollPane = new JScrollPane(picture);
-   
+          
+          
           //Create a split pane with the two scroll panes in it.
           itemSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      listScrollPane, pictureScrollPane);
           itemSplit.setOneTouchExpandable(true);
           itemSplit.setDividerLocation(150);
+
+          
+          
    
           //Provide minimum sizes for the two components in the split pane.
-          Dimension minimumSize = new Dimension(100, 50);
+          Dimension minimumSize = new Dimension(300, 200);
           listScrollPane.setMinimumSize(minimumSize);
           pictureScrollPane.setMinimumSize(minimumSize);
    
           //Provide a preferred size for the split pane.
-          itemSplit.setPreferredSize(new Dimension(400, 200));
-          updateLabel(imageNames[itemList.getSelectedIndex()]);
-          
+          itemSplit.setPreferredSize(new Dimension(600, 400));
+          updateLabel(name[itemList.getSelectedIndex()]);
+        
+    
           return itemSplit;
-								
-		/*JPanel box = new JPanel();
-		JLabel label = new JLabel(description);
-		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
-		box.add(label);
-
-
-		JPanel pane = new JPanel(new BorderLayout());
-		pane.add(box, BorderLayout.PAGE_START);
-		pane.add(doneButton, BorderLayout.PAGE_END);
-		return pane;
-		//return null;*/
-      }
-      
      
-      
-      
-      /**
-       * Used by createSimpleDialogBox and createFeatureDialogBox
-       * to create a pane containing a description, a single column
-       * of radio buttons, and the Show it! button.
-       */
+      }
+  
       private JPanel createPane1(String description,
                                 JRadioButton[] radioButtons,
                                 JButton showButton) {
@@ -299,23 +341,8 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
           pane.add(showButton, BorderLayout.PAGE_END);
           return pane;
       }
+    
 
-      /**
-       * Like createPane, but creates a pane with 2 columns of radio
-       * buttons.  The number of buttons passed in *must* be even.
-       */
-
-		
-	  /*  private JPanel createPane(String string, JRadioButton[] radioButtons,
-			JButton showItButton) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-		private JPanel createFeatureDialogBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	    /**
 	     * Create the GUI and show it.  For thread safety,
 	     * this method should be invoked from the
@@ -346,23 +373,23 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
 	        });
 	}
 
-		public void valueChanged(ListSelectionEvent e, String key) {
-		    if (e.getValueIsAdjusting())
-	            return;
 
-	        JList itemList = (JList)e.getSource();
-	        if (itemList.isSelectionEmpty()) {
-	            label.setText("Nothing selected.");
-	        } else {
-	            int index = itemList.getSelectedIndex();
-	            label.setText(ctrl.getItemInfo(key));
-	        }
-			
-		}
+		
+	     public void valueChanged(ListSelectionEvent e) {
+			    if (e.getValueIsAdjusting())
+		            return;
 
-		@Override
-		public void valueChanged(ListSelectionEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+		        JList itemList = (JList)e.getSource();
+		        updateLabel(name[itemList.getSelectedIndex()]);
+		        if (itemList.isSelectionEmpty()) {
+		            label.setText("Nothing selected.");
+		        } else {
+		            int index = itemList.getSelectedIndex();
+		            //label.setText(name[itemList.getSelectedIndex()]);
+		            label.setText(ctrl.getItemInventory());
+		        }
+				
+			}
+
+		
 }

@@ -97,7 +97,7 @@ public class StoreUI{
                System.out.print("Key code > ");
                Scanner scanKey = new Scanner(System.in);
                String key = scanKey.nextLine().toUpperCase();
-               System.out.println(ctrl.getItemInfo(key)); 
+               //System.out.println(ctrl.getItemInfo(key)); 
             } else if (input.equals("Quit") | input.equals("quit")){
                    System.out.print("Are you sure (y/n)?>");
                    Scanner scan1 = new Scanner(System.in);
