@@ -4,6 +4,7 @@ abstract class Product
     String ID, name, desc;
     int dbQty;
     int cartQty;
+    int index;
 
     Product()
     {}

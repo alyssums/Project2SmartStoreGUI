@@ -1,3 +1,4 @@
+import java.awt.List;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ public class ProductDB {
 	 
      ProductDB(){
           Book book1 = new Book();
+          book1.index = 0;
           book1.ID = "PL";
           book1.dbQty = 1;
           book1.author = "Michael Crighton";
@@ -21,6 +23,7 @@ public class ProductDB {
           contents.put(book1.ID, book1);
 
           Book book2 = new Book();
+          book2.index = 1;
           book2.ID = "CSH";
           book2.dbQty = 2;
           book2.author = "Sir Arthur Conan Doyle";
@@ -31,6 +34,7 @@ public class ProductDB {
           contents.put(book2.ID, book2);
           
           Book book3 = new Book();
+          book3.index = 2;
           book3.ID = "HPDH";
           book3.dbQty = 3;
           book3.author = "J.K. Rowling";
@@ -41,6 +45,7 @@ public class ProductDB {
           contents.put(book3.ID, book3);
 
           Music music1 = new Music();
+          music1.index = 3;
           music1.ID = "HWGA";
           music1.dbQty = 3;
           music1.name = "Here We Go Again";
@@ -51,6 +56,7 @@ public class ProductDB {
           contents.put(music1.ID, music1);
           
           Music music2 = new Music();
+          music2.index = 4;
           music2.ID = "MC";
           music2.dbQty = 2;
           music2.name = "McCartney";
@@ -61,6 +67,7 @@ public class ProductDB {
           contents.put(music2.ID, music2);
           
           Video video1 = new Video();
+          video1.index = 5;
           video1.ID = "KS";
           video1.dbQty = 3;
           video1.name = "The King's Speech";
@@ -73,6 +80,7 @@ public class ProductDB {
           contents.put(video1.ID, video1);
           
           Video video2 = new Video();
+          video2.index = 6;
           video2.ID = "HW";
           video2.dbQty = 1;
           video2.name = "The Horse Whisperer";
@@ -85,6 +93,7 @@ public class ProductDB {
           contents.put(video2.ID, video2);
           
           Video video3 = new Video();
+          video3.index = 7;
           video3.ID = "RHPS";
           video3.dbQty = 2;
           video3.name = "Rocky Horror Picture Show";
@@ -97,6 +106,7 @@ public class ProductDB {
           contents.put(video3.ID, video3);
           
           Video video4 = new Video();
+          video4.index = 8;
           video4.ID = "LOTR";
           video4.dbQty = 3;
           video4.name = "The Lord of the Rings";

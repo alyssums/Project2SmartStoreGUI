@@ -12,6 +12,7 @@ public class Controller{
 	ProductDB db = new ProductDB();
     HashMap <String, Product> contents = new HashMap <String, Product>();
     Cart cart = new Cart();
+	public Object getItem;
     
     
     
@@ -20,11 +21,32 @@ public class Controller{
     }
   
 
-	
+    String getItemName(String nameInfo){
+    return getItem.toString();
+    //return contents.get(getItem).toString();	
+    }
     
     String getItemInfo(String key){
         return contents.get(key).toString(); 
      }
+   /* String getItemInfo(String getItemName){
+    	  Vector <String> keys = new Vector (contents.keySet());
+          Collections.sort(keys);
+          //String message = contents.get(key).toString;
+          for (Enumeration <String> e = keys.elements(); e.hasMoreElements();){
+              String key = e.nextElement();
+              Product item = contents.get(key); 
+              //String getItemName;
+              //msg += item.name + ", " + item.ID + ", " + item.dbQty + "\n";
+          }
+        return contents.get(key).toString(); 
+          //return message;
+     }*/
+    
+   /* String getItemInfo(String name){
+    	//name[StoreGUI.getvalueChanged()];
+        return contents.get(getItem).toString(); 
+     }*/
     
     String getItemInventory(){
         Vector <String> keys = new Vector (contents.keySet());
@@ -33,7 +55,7 @@ public class Controller{
         for (Enumeration <String> e = keys.elements(); e.hasMoreElements();){
             String key = e.nextElement();
             Product item = contents.get(key); 
-            String[] name;
+            //String[] name;
             msg += item.name + ", " + item.ID + ", " + item.dbQty + "\n";
         }
         return msg;
