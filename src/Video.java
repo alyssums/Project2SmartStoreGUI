@@ -12,11 +12,11 @@ public class Video extends Product {
 	}
 		   
 	public String toString(){
-		return super.toString() + "\n" +
-		   "Actors: " + principleActors + "\n" +
-		   "Rating: " + rating + "\n" +
-		   "Format: " + format + "\n" + 
-		   "Running Time: " + runningTime;
+		return super.toString() +
+		   "<br>Actors: " + principleActors + "\n" +
+		   "<br>Rating: " + rating + "\n" +
+		   "<br>Format: " + format + "\n" + 
+		   "<br>Running Time: " + runningTime;
 	}
 		           
 }

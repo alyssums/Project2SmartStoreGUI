@@ -40,8 +40,7 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
 	  String simpleDialogDesc = "Some simple message dialogs";
 	  String menuHoverDesc = "SmartStore.com Command Menu";
 	  String detailsHoverDesc = "Item Descriptions and Images";
-	  //String[] key = {"PL", "CSH", "HPDH", "HWGA", "MC", "KS",
-	            //"HW", "RHPS", "LOTR"};
+
 	  
 	  Controller ctrl = new Controller();
 	  
@@ -77,13 +76,12 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
       label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
   }
 
-  /** Sets the text displayed at the bottom of the frame. */
+
   void setLabel(String newText) {
       label.setText(newText);
   }
 
-      
-      /** Creates the panel shown by the first tab. */
+
       private JPanel menuTab() {
           final int numButtons = 6;
           JRadioButton[] radioButtons = new JRadioButton[numButtons];
@@ -136,8 +134,10 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
                 			  "Store Inventory: " + "\n" + ctrl.getItemInventory());
                   } else if (command == helpCommand){
                 	  JOptionPane.showMessageDialog(frame,
-                			  "I need somebody.",
-                			  "HELP!",
+                			  "Choose an option from the menu and click on the 'Select' button. " +
+                			  "\n" + 
+                			  "For item details, click on the 'Item Details' tab, where you can find product information.",
+                			  "Help",
                 			  JOptionPane.INFORMATION_MESSAGE);
                   } else if (command == yesNoCommand) {
                       int n = JOptionPane.showConfirmDialog(
@@ -152,16 +152,15 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
                         		  JOptionPane.PLAIN_MESSAGE);
                           		  System.exit(0);
                       } else if (n == JOptionPane.NO_OPTION) {
-                          setLabel("Choose a command");
+                          setLabel("Quit canceled. Choose a command.");
                       } 
                   } else if (command == addCommand) {
                       String date = (String)JOptionPane.showInputDialog(
                                           frame,
                                           "Enter Date"
                                           + "Please Enter Transaction Date: ",
-                                          "(mm/dd/yyyy)");
+                                          "mm/dd/yyyy");
 
-                      //If a string was returned, say so.
                       if ((date != null) && (date.length() > 0)) {
                     	  Transaction.isValidDate(date);{
                         		if (Transaction.isValidDate(date) == true){
@@ -171,7 +170,7 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
                       					+"Enter Item Code",
                       					"Example: LOTR");{
                       						if(ctrl.addToCart(productID) == true){
-                      							setLabel("Item Added");
+                      							setLabel("Item Added: '" + productID + "'"+ " on " + date);
                       						} else {
                       							setLabel("Invalid Item. Item not added");
                       						}
@@ -188,11 +187,9 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
                               frame,
                               "Enter Date"
                               + "Please Enter Transaction Date: ",
-                              "(mm/dd/yyyy)");
+                              "mm/dd/yyyy");
 
-                	  //If a string was returned, say so.
                       if ((date != null) && (date.length() > 0)){
-                    	  //Transaction.isValidDate(date);{
                   		if (Transaction.isValidDate(date) == true){
                 			setLabel("Valid Date");
                   			String productID = (String)JOptionPane.showInputDialog(frame,
@@ -200,7 +197,7 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
                   					+ "Enter Item Code",
                   					"Example: PL");{
                   						if(ctrl.removeFromCart(productID) == true){
-                  							setLabel("Item Removed");
+                  							setLabel("Item Removed: '" + productID + "'" + " on " + date);
                   						} else {
                   							setLabel("Invalid Item. Item not removed");
                   						}
@@ -236,8 +233,7 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
 	
       }
 
-       
-      //Renders the selected image
+    
       protected void updateLabel (Object object) {
           ImageIcon icon = createImageIcon(object + ".jpg");
           picture.setIcon(icon);
@@ -268,9 +264,7 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
     		  					 JSplitPane itemSplit,
     		  					 JList itemList,
     		  					 JScrollPane itemScroll){
-    	  
-      
-  	    //Create the list of images and put it in a scroll pane.
+
           
           itemList = new JList(ctrl.contents.keySet().toArray());
           itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -284,26 +278,17 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
           picture.setHorizontalAlignment(JLabel.CENTER);
           
           
-          
-          
           JScrollPane pictureScrollPane = new JScrollPane(picture);
           
-          
-          //Create a split pane with the two scroll panes in it.
           itemSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      listScrollPane, pictureScrollPane);
           itemSplit.setOneTouchExpandable(true);
           itemSplit.setDividerLocation(150);
 
-          
-          
-   
-          //Provide minimum sizes for the two components in the split pane.
           Dimension minimumSize = new Dimension(300, 200);
           listScrollPane.setMinimumSize(minimumSize);
           pictureScrollPane.setMinimumSize(minimumSize);
    
-          //Provide a preferred size for the split pane.
           itemSplit.setPreferredSize(new Dimension(600, 400));
           updateLabel(ctrl.contents.keySet().toArray()[itemList.getSelectedIndex()]);
         
@@ -333,23 +318,15 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
           return pane;
       }
     
-
-	    /**
-	     * Create the GUI and show it.  For thread safety,
-	     * this method should be invoked from the
-	     * event-dispatching thread.
-	     */
 	    private static void createAndShowGUI() {
-	        //Create and set up the window.
+	        
 	        JFrame frame = new JFrame("SmartStore.com");
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	        //Create and set up the content pane.
 	        StoreGUI newContentPane = new StoreGUI();
 	        newContentPane.setOpaque(true); //content panes must be opaque
 	        frame.setContentPane(newContentPane);
-
-	        //Display the window.
+	        
 	        frame.pack();
 	        frame.setVisible(true);
 	    }
@@ -362,8 +339,6 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
 	        });
 	}
 
-
-		
 	     public void valueChanged(ListSelectionEvent e) {
 			    if (e.getValueIsAdjusting())
 		            return;
@@ -373,10 +348,9 @@ public class StoreGUI extends JPanel implements ListSelectionListener {
 		        if (itemList.isSelectionEmpty()) {
 		            label.setText("Nothing selected.");
 		        } else {
-		            int index = itemList.getSelectedIndex();
-		            ctrl.getItem = (String)ctrl.contents.keySet().toArray()[itemList.getSelectedIndex()];
-		            //label.setText((String) ctrl.contents.keySet().toArray()[itemList.getSelectedIndex()]);
-		            //label.setText(ctrl.getItemInfo);
+		            String itemName = (String) itemList.getSelectedValue();
+		            //ctrl.getItem = (String)ctrl.contents.keySet().toArray()[itemList.getSelectedIndex()];
+		            label.setText(ctrl.getItemInfo(itemName));
 
 		        }
 		        

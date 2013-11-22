@@ -29,10 +29,10 @@ abstract class Product
     public String toString()
     {
       String msg = "";
-      msg += "ID: " + this.ID + "\n";
-      msg += "Name: " + this.name + "\n";
-      msg += "Description: " + this.desc + "\n";
-      msg += "Quantity: " + this.dbQty;
+      msg += "<html>Name: " + this.name;
+      msg += "<br>ID: " + this.ID;
+      msg += "<br>Description: " + this.desc;
+      msg += "<br>Quantity: " + this.dbQty;
       return msg;
     }
 

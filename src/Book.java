@@ -14,9 +14,9 @@ public class Book extends Product
     
     public String toString()
     {
-    	return super.toString() + "\n" +
-                "Author: " + author + "\n" +
-                "Genre: " + genre + "\n" +
-                "Number of Pages: " + numberPages + "\n";
+    	return super.toString() +
+                "<br>Author: " + author +
+                "<br>Genre: " + genre +
+                "<br>Number of Pages: " + numberPages;
     }
 }

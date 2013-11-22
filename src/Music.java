@@ -14,10 +14,10 @@ public class Music extends Product
    
    public String toString()
    {
-       return super.toString() + "\n" +
-              "Artist: " + artist + "\n" +
-              "Genre: " + genre + "\n" +
-              "Format: " + format + "\n"; 
+       return super.toString() +
+              "<br>Artist: " + artist +
+              "<br>Genre: " + genre +
+              "<br>Format: " + format; 
               
    }
            
